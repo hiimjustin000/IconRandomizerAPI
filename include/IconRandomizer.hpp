@@ -7,7 +7,7 @@
         #define ICON_RANDOMIZER_API_DLL __declspec(dllimport)
     #endif
 #else
-    #define ICON_RANDOMIZER_API_DLL // Android and macOS have symbols public by default
+    #define ICON_RANDOMIZER_API_DLL __attribute__((visibility("default")))
 #endif
 
 #define ICON_RANDOMIZER_API_COLOR_1 0
