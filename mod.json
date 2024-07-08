@@ -1,0 +1,24 @@
+{
+    "geode": "3.2.0",
+    "gd": {
+        "android": "2.206",
+        "win": "2.206",
+        "mac": "2.206"
+    },
+    "version": "v1.0.0",
+    "id": "hiimjustin000.icon_randomizer_api",
+    "name": "Icon Randomizer API",
+    "developer": "hiimjustin000",
+    "description": "A mod that provides an API for randomizing icons and colors.",
+    "repository": "https://github.com/hiimjustin000/IconRandomizerAPI",
+    "api": {
+        "include": [
+            "include/*.hpp"
+        ]
+    },
+    "tags": [
+        "developer",
+        "offline",
+        "utility"
+    ]
+}
