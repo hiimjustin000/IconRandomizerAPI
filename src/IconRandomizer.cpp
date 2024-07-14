@@ -22,9 +22,12 @@ using namespace geode::prelude;
 #define SDI_SHIP_FIRE "shiptrail"
 
 void IconRandomizer::setupUnlockedIcons(IconType type) {
+    // Get the game manager and the vector of unlocked icons for the icon type, then clear the vector.
     auto gameManager = GameManager::sharedState();
     auto& vec = UNLOCKED[gameManager->iconTypeToUnlockType(type)];
     vec.clear();
+
+    // Get the amount of icons for the type, then iterate through them and add them to the vector if they are unlocked.
     auto amount = type == IconType::Item ? 20 : gameManager->countForType(type);
     for (int i = type == IconType::Item ? 18 : 1; i <= amount; i++) {
         if (gameManager->isIconUnlocked(i, type)) vec.push_back(i);
@@ -32,9 +35,12 @@ void IconRandomizer::setupUnlockedIcons(IconType type) {
 }
 
 void IconRandomizer::setupUnlockedColors(UnlockType type) {
+    // Get the game manager and the vector of unlocked colors for the unlock type, then clear the vector.
     auto gameManager = GameManager::sharedState();
     auto& vec = UNLOCKED[type];
     vec.clear();
+
+    // Iterate through the colors and add them to the vector if they are unlocked.
     for (int i = 0; i < 107; i++) {
         if (gameManager->isColorUnlocked(i, type)) vec.push_back(i);
     }
@@ -68,8 +74,32 @@ int IconRandomizer::random(int min, int max) {
     return std::uniform_int_distribution<int>(min, max)(mt);
 }
 
-int IconRandomizer::fromIconType(IconType type) {
-    // Convert the icon type to an ICON_RANDOMIZER_API constant.
+RandomizeType IconRandomizer::fromConstant(int type) {
+    // Convert the constant to a randomize type.
+    switch (type) {
+        case 0: return ICON_RANDOMIZER_API_COLOR_1;
+        case 1: return ICON_RANDOMIZER_API_COLOR_2;
+        case 2: return ICON_RANDOMIZER_API_GLOW_COLOR;
+        case 3: return ICON_RANDOMIZER_API_GLOW;
+        case 4: return ICON_RANDOMIZER_API_CUBE;
+        case 5: return ICON_RANDOMIZER_API_SHIP;
+        case 6: return ICON_RANDOMIZER_API_BALL;
+        case 7: return ICON_RANDOMIZER_API_UFO;
+        case 8: return ICON_RANDOMIZER_API_WAVE;
+        case 9: return ICON_RANDOMIZER_API_ROBOT;
+        case 10: return ICON_RANDOMIZER_API_SPIDER;
+        case 11: return ICON_RANDOMIZER_API_SWING;
+        case 12: return ICON_RANDOMIZER_API_JETPACK;
+        case 13: return ICON_RANDOMIZER_API_DEATH_EFFECT;
+        case 14: return ICON_RANDOMIZER_API_TRAIL;
+        case 15: return ICON_RANDOMIZER_API_SHIP_FIRE;
+        case 16: return ICON_RANDOMIZER_API_ANIMATION;
+        default: return ICON_RANDOMIZER_API_CUBE;
+    }
+}
+
+RandomizeType IconRandomizer::randomizeTypeFromIconType(IconType type) {
+    // Convert the icon type to a randomize type.
     switch (type) {
         case IconType::Cube: return ICON_RANDOMIZER_API_CUBE;
         case IconType::Ship: return ICON_RANDOMIZER_API_SHIP;
@@ -84,12 +114,17 @@ int IconRandomizer::fromIconType(IconType type) {
         case IconType::Special: return ICON_RANDOMIZER_API_TRAIL;
         case IconType::Item: return ICON_RANDOMIZER_API_ANIMATION;
         case IconType::ShipFire: return ICON_RANDOMIZER_API_SHIP_FIRE;
-        default: return -1;
+        default: return ICON_RANDOMIZER_API_CUBE;
     }
 }
 
-UnlockType IconRandomizer::toUnlockType(int type) {
-    // Convert the ICON_RANDOMIZER_API constant to an UnlockType.
+int IconRandomizer::fromIconType(IconType type) {
+    // Deprecated function, kept for compatibility.
+    return randomizeTypeFromIconType(type);
+}
+
+UnlockType IconRandomizer::unlockTypeFromRandomizeType(RandomizeType type) {
+    // Convert the randomize type to an unlock type.
     switch (type) {
         case ICON_RANDOMIZER_API_COLOR_1: return UnlockType::Col1;
         case ICON_RANDOMIZER_API_COLOR_2: return UnlockType::Col2;
@@ -112,7 +147,12 @@ UnlockType IconRandomizer::toUnlockType(int type) {
     }
 }
 
-int IconRandomizer::randomize(int type, bool dual) {
+UnlockType IconRandomizer::toUnlockType(int type) {
+    // Deprecated function, kept for compatibility.
+    return unlockTypeFromRandomizeType(fromConstant(type));
+}
+
+int IconRandomizer::randomize(RandomizeType type, bool dual) {
     // Initialize the API if it hasn't been already.
     if (!INITIALIZED) {
         init();
@@ -122,8 +162,8 @@ int IconRandomizer::randomize(int type, bool dual) {
     // If the type is invalid, return -1.
     if (type < 0 || type > 16) return -1;
 
-    // Get the UnlockType from the ICON_RANDOMIZER_API constant, and get the vector of unlocked icons.
-    auto& vec = UNLOCKED[toUnlockType(type)];
+    // Get the UnlockType from the randomize type, and get the vector of unlocked icons.
+    auto& vec = UNLOCKED[unlockTypeFromRandomizeType(type)];
 
     // If it is an animation, randomly enable or disable the animations, and return 0.
     if (type == ICON_RANDOMIZER_API_ANIMATION) {
@@ -215,8 +255,13 @@ int IconRandomizer::randomize(int type, bool dual) {
     }
 }
 
-void IconRandomizer::randomizeAll(int type, bool dual) {
-    // Switch on the type of icon to randomize all of them.
+int IconRandomizer::randomize(int type, bool dual) {
+    // Convert the type to a randomize type and randomize it.
+    return randomize(fromConstant(type), dual);
+}
+
+void IconRandomizer::randomizeAll(RandomizeAllType type, bool dual) {
+    // Switch on the randomize all type and randomize all the icons of that type.
     switch (type) {
         case ICON_RANDOMIZER_API_ALL_ICONS:
             randomize(ICON_RANDOMIZER_API_CUBE, dual);
@@ -244,10 +289,15 @@ void IconRandomizer::randomizeAll(int type, bool dual) {
     }
 }
 
-int IconRandomizer::active(int type, bool dual) {
-    // Get the UnlockType from the ICON_RANDOMIZER_API constant, then get the game manager and the Separate Dual Icons mod.
+void IconRandomizer::randomizeAll(int type, bool dual) {
+    // Convert the type to a randomize all type and randomize all the icons of that type.
+    randomizeAll(fromConstant(type), dual);
+}
+
+int IconRandomizer::active(RandomizeType type, bool dual) {
+    // Get the UnlockType from the randomize type, then get the game manager and the Separate Dual Icons mod.
     // If the mod is enabled and the dual parameter is true, use separate dual icons.
-    auto unlockType = toUnlockType(type);
+    auto unlockType = unlockTypeFromRandomizeType(type);
     auto gameManager = GameManager::sharedState();
     auto separateDualIcons = Loader::get()->getLoadedMod(SDI_ID);
     auto useDual = separateDualIcons && dual;
@@ -289,4 +339,9 @@ int IconRandomizer::active(int type, bool dual) {
         default:
             return -1;
     }
+}
+
+int IconRandomizer::active(int type, bool dual) {
+    // Convert the type to a randomize type and get the active value.
+    return active(fromConstant(type), dual);
 }

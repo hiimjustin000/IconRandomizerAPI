@@ -5,7 +5,7 @@
         "win": "2.206",
         "mac": "2.206"
     },
-    "version": "v1.0.1",
+    "version": "v1.1.0",
     "id": "hiimjustin000.icon_randomizer_api",
     "name": "Icon Randomizer API",
     "developer": "hiimjustin000",
@@ -16,6 +16,13 @@
             "include/*.hpp"
         ]
     },
+    "dependencies": [
+        {
+            "id": "hiimjustin000.better_icon_randomizer",
+            "version": ">=v1.4.2",
+            "importance": "recommended"
+        }
+    ],
     "tags": [
         "developer",
         "offline",

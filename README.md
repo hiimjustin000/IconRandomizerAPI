@@ -8,7 +8,7 @@ To use this API, you must first add the following dependency to your `mod.json` 
     "dependencies": [
         {
             "id": "hiimjustin000.icon_randomizer_api",
-            "version": ">=1.0.0",
+            "version": ">=v1.1.0",
             "importance": "required"
         }
     ]
@@ -51,27 +51,31 @@ Full documentation can be found [here](./include/IconRandomizer.hpp).
 # Constants
 The following constants are available for use:
 ```cpp
-#define ICON_RANDOMIZER_API_COLOR_1 0
-#define ICON_RANDOMIZER_API_COLOR_2 1
-#define ICON_RANDOMIZER_API_GLOW_COLOR 2
-#define ICON_RANDOMIZER_API_GLOW 3
-#define ICON_RANDOMIZER_API_CUBE 4
-#define ICON_RANDOMIZER_API_SHIP 5
-#define ICON_RANDOMIZER_API_BALL 6
-#define ICON_RANDOMIZER_API_UFO 7
-#define ICON_RANDOMIZER_API_WAVE 8
-#define ICON_RANDOMIZER_API_ROBOT 9
-#define ICON_RANDOMIZER_API_SPIDER 10
-#define ICON_RANDOMIZER_API_SWING 11
-#define ICON_RANDOMIZER_API_JETPACK 12
-#define ICON_RANDOMIZER_API_DEATH_EFFECT 13
-#define ICON_RANDOMIZER_API_TRAIL 14
-#define ICON_RANDOMIZER_API_SHIP_FIRE 15
-#define ICON_RANDOMIZER_API_ANIMATION 16
+enum RandomizeType {
+    ICON_RANDOMIZER_API_COLOR_1 = 0,
+    ICON_RANDOMIZER_API_COLOR_2 = 1,
+    ICON_RANDOMIZER_API_GLOW_COLOR = 2,
+    ICON_RANDOMIZER_API_GLOW = 3,
+    ICON_RANDOMIZER_API_CUBE = 4,
+    ICON_RANDOMIZER_API_SHIP = 5,
+    ICON_RANDOMIZER_API_BALL = 6,
+    ICON_RANDOMIZER_API_UFO = 7,
+    ICON_RANDOMIZER_API_WAVE = 8,
+    ICON_RANDOMIZER_API_ROBOT = 9,
+    ICON_RANDOMIZER_API_SPIDER = 10,
+    ICON_RANDOMIZER_API_SWING = 11,
+    ICON_RANDOMIZER_API_JETPACK = 12,
+    ICON_RANDOMIZER_API_DEATH_EFFECT = 13,
+    ICON_RANDOMIZER_API_TRAIL = 14,
+    ICON_RANDOMIZER_API_SHIP_FIRE = 15,
+    ICON_RANDOMIZER_API_ANIMATION = 16
+};
 
-#define ICON_RANDOMIZER_API_ALL_ICONS 0
-#define ICON_RANDOMIZER_API_ALL_SPECIAL 1
-#define ICON_RANDOMIZER_API_ALL_COLORS 2
+enum RandomizeAllType {
+    ICON_RANDOMIZER_API_ALL_ICONS = 0,
+    ICON_RANDOMIZER_API_ALL_SPECIAL = 1,
+    ICON_RANDOMIZER_API_ALL_COLORS = 2
+};
 ```
 
 # License
