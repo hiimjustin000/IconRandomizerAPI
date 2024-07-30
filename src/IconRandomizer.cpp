@@ -98,6 +98,16 @@ RandomizeType IconRandomizer::fromConstant(int type) {
     }
 }
 
+RandomizeAllType IconRandomizer::fromAllConstant(int type) {
+    // Convert the constant to a randomize all type.
+    switch (type) {
+        case 0: return ICON_RANDOMIZER_API_ALL_ICONS;
+        case 1: return ICON_RANDOMIZER_API_ALL_SPECIAL;
+        case 2: return ICON_RANDOMIZER_API_ALL_COLORS;
+        default: return ICON_RANDOMIZER_API_ALL_ICONS;
+    }
+}
+
 RandomizeType IconRandomizer::randomizeTypeFromIconType(IconType type) {
     // Convert the icon type to a randomize type.
     switch (type) {
@@ -291,7 +301,7 @@ void IconRandomizer::randomizeAll(RandomizeAllType type, bool dual) {
 
 void IconRandomizer::randomizeAll(int type, bool dual) {
     // Convert the type to a randomize all type and randomize all the icons of that type.
-    randomizeAll(fromConstant(type), dual);
+    randomizeAll(fromAllConstant(type), dual);
 }
 
 int IconRandomizer::active(RandomizeType type, bool dual) {

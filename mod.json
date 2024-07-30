@@ -1,11 +1,11 @@
 {
-    "geode": "3.2.0",
+    "geode": "3.4.0",
     "gd": {
         "android": "2.206",
         "win": "2.206",
         "mac": "2.206"
     },
-    "version": "v1.1.0",
+    "version": "v1.1.1",
     "id": "hiimjustin000.icon_randomizer_api",
     "name": "Icon Randomizer API",
     "developer": "hiimjustin000",

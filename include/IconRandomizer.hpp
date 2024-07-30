@@ -95,6 +95,9 @@ private:
 
     // A helper function to convert a ICON_RANDOMIZER_API constant to a randomize type, for backwards compatibility.
     static RandomizeType fromConstant(int type);
+
+    // A helper function to convert a ICON_RANDOMIZER_API_ALL constant to a randomize all type, for backwards compatibility.
+    static RandomizeAllType fromAllConstant(int type);
 public:
     /**
      * The function to initalize the Icon Randomizer API.
