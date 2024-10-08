@@ -244,6 +244,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_CUBE, num);
                 else gameManager->setPlayerFrame(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_CUBE "-dual" : MI_CUBE, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_CUBE "-dual" : MI_CUBE, loadedIcons[num]);
@@ -252,6 +253,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_SHIP, num);
                 else gameManager->setPlayerShip(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_SHIP "-dual" : MI_SHIP, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_SHIP "-dual" : MI_SHIP, loadedIcons[num]);
@@ -260,6 +262,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_BALL, num);
                 else gameManager->setPlayerBall(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_BALL "-dual" : MI_BALL, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_BALL "-dual" : MI_BALL, loadedIcons[num]);
@@ -268,6 +271,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_UFO, num);
                 else gameManager->setPlayerBird(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_UFO "-dual" : MI_UFO, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_UFO "-dual" : MI_UFO, loadedIcons[num]);
@@ -276,6 +280,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_WAVE, num);
                 else gameManager->setPlayerDart(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_WAVE "-dual" : MI_WAVE, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_WAVE "-dual" : MI_WAVE, loadedIcons[num]);
@@ -284,6 +289,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_ROBOT, num);
                 else gameManager->setPlayerRobot(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_ROBOT "-dual" : MI_ROBOT, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_ROBOT "-dual" : MI_ROBOT, loadedIcons[num]);
@@ -292,6 +298,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_SPIDER, num);
                 else gameManager->setPlayerSpider(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_SPIDER "-dual" : MI_SPIDER, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_SPIDER "-dual" : MI_SPIDER, loadedIcons[num]);
@@ -300,6 +307,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_SWING, num);
                 else gameManager->setPlayerSwing(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_SWING "-dual" : MI_SWING, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_SWING "-dual" : MI_SWING, loadedIcons[num]);
@@ -308,6 +316,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_JETPACK, num);
                 else gameManager->setPlayerJetpack(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_JETPACK "-dual" : MI_JETPACK, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_JETPACK "-dual" : MI_JETPACK, loadedIcons[num]);
@@ -320,6 +329,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             if (idx < vec.size()) {
                 if (useDual) setSDIValue(separateDualIcons, SDI_TRAIL, num);
                 else gameManager->setPlayerStreak(num);
+                setSDIValue<std::string>(moreIcons, useDual ? MI_TRAIL "-dual" : MI_TRAIL, "");
                 return num;
             }
             setSDIValue(moreIcons, useDual ? MI_TRAIL "-dual" : MI_TRAIL, loadedIcons[num]);
