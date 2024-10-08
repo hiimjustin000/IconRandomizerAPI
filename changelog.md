@@ -1,4 +1,7 @@
 # Icon Randomizer API Changelog
+## v1.1.2 (2024-10-08)
+- Added More Icons support
+
 ## v1.1.1 (2024-07-29)
 - Fixed a bug where the randomize all function would not work properly
 

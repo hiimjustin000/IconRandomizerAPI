@@ -21,6 +21,18 @@ using namespace geode::prelude;
 #define SDI_TRAIL "trail"
 #define SDI_SHIP_FIRE "shiptrail"
 
+#define MI_ID "hiimjustin000.more_icons"
+#define MI_CUBE "icon"
+#define MI_SHIP "ship"
+#define MI_BALL "ball"
+#define MI_UFO "ufo"
+#define MI_WAVE "wave"
+#define MI_ROBOT "robot"
+#define MI_SPIDER "spider"
+#define MI_SWING "swing"
+#define MI_JETPACK "jetpack"
+#define MI_TRAIL "trail"
+
 void IconRandomizer::setupUnlockedIcons(IconType type) {
     // Get the game manager and the vector of unlocked icons for the icon type, then clear the vector.
     auto gameManager = GameManager::sharedState();
@@ -189,7 +201,23 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
     auto gameManager = GameManager::sharedState();
     auto separateDualIcons = Loader::get()->getLoadedMod(SDI_ID);
     auto useDual = separateDualIcons && dual;
-    auto num = vec[(size_t)random(0, vec.size() - 1)];
+    auto moreIcons = Loader::get()->getLoadedMod(MI_ID);
+    std::vector<std::string> loadedIcons;
+    switch (type) {
+        case ICON_RANDOMIZER_API_CUBE: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_CUBE "s", {}); break;
+        case ICON_RANDOMIZER_API_SHIP: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_SHIP "s", {}); break;
+        case ICON_RANDOMIZER_API_BALL: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_BALL "s", {}); break;
+        case ICON_RANDOMIZER_API_UFO: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_UFO "s", {}); break;
+        case ICON_RANDOMIZER_API_WAVE: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_WAVE "s", {}); break;
+        case ICON_RANDOMIZER_API_ROBOT: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_ROBOT "s", {}); break;
+        case ICON_RANDOMIZER_API_SPIDER: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_SPIDER "s", {}); break;
+        case ICON_RANDOMIZER_API_SWING: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_SWING "s", {}); break;
+        case ICON_RANDOMIZER_API_JETPACK: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_JETPACK "s", {}); break;
+        case ICON_RANDOMIZER_API_TRAIL: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_TRAIL "s", {}); break;
+        default: break;
+    }
+    auto idx = random(0, vec.size() + loadedIcons.size() - 1);
+    auto num = idx < vec.size() ? vec[idx] : idx - vec.size();
     auto glow = type == ICON_RANDOMIZER_API_GLOW ? (bool)random(0, 1) : false;
 
     // Then, set the icon to the random number.
@@ -209,53 +237,93 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
             else gameManager->setPlayerColor3(num);
             return num;
         case ICON_RANDOMIZER_API_GLOW:
-            if (useDual) setSDIValue<bool>(separateDualIcons, SDI_GLOW, glow);
+            if (useDual) setSDIValue(separateDualIcons, SDI_GLOW, glow);
             else gameManager->setPlayerGlow(glow);
             return glow;
         case ICON_RANDOMIZER_API_CUBE:
-            if (useDual) setSDIValue(separateDualIcons, SDI_CUBE, num);
-            else gameManager->setPlayerFrame(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_CUBE, num);
+                else gameManager->setPlayerFrame(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_CUBE "-dual" : MI_CUBE, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_SHIP:
-            if (useDual) setSDIValue(separateDualIcons, SDI_SHIP, num);
-            else gameManager->setPlayerShip(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_SHIP, num);
+                else gameManager->setPlayerShip(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_SHIP "-dual" : MI_SHIP, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_BALL:
-            if (useDual) setSDIValue(separateDualIcons, SDI_BALL, num);
-            else gameManager->setPlayerBall(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_BALL, num);
+                else gameManager->setPlayerBall(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_BALL "-dual" : MI_BALL, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_UFO:
-            if (useDual) setSDIValue(separateDualIcons, SDI_UFO, num);
-            else gameManager->setPlayerBird(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_UFO, num);
+                else gameManager->setPlayerBird(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_UFO "-dual" : MI_UFO, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_WAVE:
-            if (useDual) setSDIValue(separateDualIcons, SDI_WAVE, num);
-            else gameManager->setPlayerDart(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_WAVE, num);
+                else gameManager->setPlayerDart(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_WAVE "-dual" : MI_WAVE, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_ROBOT:
-            if (useDual) setSDIValue(separateDualIcons, SDI_ROBOT, num);
-            else gameManager->setPlayerRobot(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_ROBOT, num);
+                else gameManager->setPlayerRobot(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_ROBOT "-dual" : MI_ROBOT, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_SPIDER:
-            if (useDual) setSDIValue(separateDualIcons, SDI_SPIDER, num);
-            else gameManager->setPlayerSpider(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_SPIDER, num);
+                else gameManager->setPlayerSpider(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_SPIDER "-dual" : MI_SPIDER, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_SWING:
-            if (useDual) setSDIValue(separateDualIcons, SDI_SWING, num);
-            else gameManager->setPlayerSwing(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_SWING, num);
+                else gameManager->setPlayerSwing(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_SWING "-dual" : MI_SWING, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_JETPACK:
-            if (useDual) setSDIValue(separateDualIcons, SDI_JETPACK, num);
-            else gameManager->setPlayerJetpack(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_JETPACK, num);
+                else gameManager->setPlayerJetpack(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_JETPACK "-dual" : MI_JETPACK, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_DEATH_EFFECT:
             if (useDual) setSDIValue(separateDualIcons, SDI_DEATH, num);
             else gameManager->setPlayerDeathEffect(num);
             return num;
         case ICON_RANDOMIZER_API_TRAIL:
-            if (useDual) setSDIValue(separateDualIcons, SDI_TRAIL, num);
-            else gameManager->setPlayerStreak(num);
-            return num;
+            if (idx < vec.size()) {
+                if (useDual) setSDIValue(separateDualIcons, SDI_TRAIL, num);
+                else gameManager->setPlayerStreak(num);
+                return num;
+            }
+            setSDIValue(moreIcons, useDual ? MI_TRAIL "-dual" : MI_TRAIL, loadedIcons[num]);
+            return 0;
         case ICON_RANDOMIZER_API_SHIP_FIRE:
             if (useDual) setSDIValue(separateDualIcons, SDI_SHIP_FIRE, num);
             else gameManager->setPlayerShipStreak(num);
