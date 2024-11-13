@@ -1,4 +1,9 @@
 # Icon Randomizer API Changelog
+## v1.1.3-beta.1 (2024-11-13)
+- Removed deprecated API methods due to the game update
+- Renamed a few API methods to replace the deprecated ones
+- Ported to Geometry Dash v2.207
+
 ## v1.1.2 (2024-10-08)
 - Added More Icons support
 

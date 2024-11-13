@@ -120,7 +120,7 @@ RandomizeAllType IconRandomizer::fromAllConstant(int type) {
     }
 }
 
-RandomizeType IconRandomizer::randomizeTypeFromIconType(IconType type) {
+RandomizeType IconRandomizer::fromIconType(IconType type) {
     // Convert the icon type to a randomize type.
     switch (type) {
         case IconType::Cube: return ICON_RANDOMIZER_API_CUBE;
@@ -140,12 +140,7 @@ RandomizeType IconRandomizer::randomizeTypeFromIconType(IconType type) {
     }
 }
 
-int IconRandomizer::fromIconType(IconType type) {
-    // Deprecated function, kept for compatibility.
-    return randomizeTypeFromIconType(type);
-}
-
-UnlockType IconRandomizer::unlockTypeFromRandomizeType(RandomizeType type) {
+UnlockType IconRandomizer::toUnlockType(RandomizeType type) {
     // Convert the randomize type to an unlock type.
     switch (type) {
         case ICON_RANDOMIZER_API_COLOR_1: return UnlockType::Col1;
@@ -169,11 +164,6 @@ UnlockType IconRandomizer::unlockTypeFromRandomizeType(RandomizeType type) {
     }
 }
 
-UnlockType IconRandomizer::toUnlockType(int type) {
-    // Deprecated function, kept for compatibility.
-    return unlockTypeFromRandomizeType(fromConstant(type));
-}
-
 int IconRandomizer::randomize(RandomizeType type, bool dual) {
     // Initialize the API if it hasn't been already.
     if (!INITIALIZED) {
@@ -185,7 +175,7 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
     if (type < 0 || type > 16) return -1;
 
     // Get the UnlockType from the randomize type, and get the vector of unlocked icons.
-    auto& vec = UNLOCKED[unlockTypeFromRandomizeType(type)];
+    auto& vec = UNLOCKED[toUnlockType(type)];
 
     // If it is an animation, randomly enable or disable the animations, and return 0.
     if (type == ICON_RANDOMIZER_API_ANIMATION) {
@@ -204,16 +194,16 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
     auto moreIcons = Loader::get()->getLoadedMod(MI_ID);
     std::vector<std::string> loadedIcons;
     switch (type) {
-        case ICON_RANDOMIZER_API_CUBE: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_CUBE "s", {}); break;
-        case ICON_RANDOMIZER_API_SHIP: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_SHIP "s", {}); break;
-        case ICON_RANDOMIZER_API_BALL: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_BALL "s", {}); break;
-        case ICON_RANDOMIZER_API_UFO: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_UFO "s", {}); break;
-        case ICON_RANDOMIZER_API_WAVE: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_WAVE "s", {}); break;
-        case ICON_RANDOMIZER_API_ROBOT: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_ROBOT "s", {}); break;
-        case ICON_RANDOMIZER_API_SPIDER: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_SPIDER "s", {}); break;
-        case ICON_RANDOMIZER_API_SWING: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_SWING "s", {}); break;
-        case ICON_RANDOMIZER_API_JETPACK: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_JETPACK "s", {}); break;
-        case ICON_RANDOMIZER_API_TRAIL: loadedIcons = getSDIValue<std::vector<std::string>>(moreIcons, MI_TRAIL "s", {}); break;
+        case ICON_RANDOMIZER_API_CUBE: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_CUBE "s", {}); break;
+        case ICON_RANDOMIZER_API_SHIP: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_SHIP "s", {}); break;
+        case ICON_RANDOMIZER_API_BALL: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_BALL "s", {}); break;
+        case ICON_RANDOMIZER_API_UFO: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_UFO "s", {}); break;
+        case ICON_RANDOMIZER_API_WAVE: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_WAVE "s", {}); break;
+        case ICON_RANDOMIZER_API_ROBOT: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_ROBOT "s", {}); break;
+        case ICON_RANDOMIZER_API_SPIDER: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_SPIDER "s", {}); break;
+        case ICON_RANDOMIZER_API_SWING: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_SWING "s", {}); break;
+        case ICON_RANDOMIZER_API_JETPACK: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_JETPACK "s", {}); break;
+        case ICON_RANDOMIZER_API_TRAIL: loadedIcons = getModValue<std::vector<std::string>>(moreIcons, MI_TRAIL "s", {}); break;
         default: break;
     }
     auto idx = random(0, vec.size() + loadedIcons.size() - 1);
@@ -225,127 +215,122 @@ int IconRandomizer::randomize(RandomizeType type, bool dual) {
     // Otherwise, set the value in the game manager.
     switch (type) {
         case ICON_RANDOMIZER_API_COLOR_1:
-            if (useDual) setSDIValue(separateDualIcons, SDI_COLOR_1, num);
+            if (useDual) setModValue(separateDualIcons, SDI_COLOR_1, num);
             else gameManager->setPlayerColor(num);
             return num;
         case ICON_RANDOMIZER_API_COLOR_2:
-            if (useDual) setSDIValue(separateDualIcons, SDI_COLOR_2, num);
+            if (useDual) setModValue(separateDualIcons, SDI_COLOR_2, num);
             else gameManager->setPlayerColor2(num);
             return num;
         case ICON_RANDOMIZER_API_GLOW_COLOR:
-            if (useDual) setSDIValue(separateDualIcons, SDI_GLOW_COLOR, num);
+            if (useDual) setModValue(separateDualIcons, SDI_GLOW_COLOR, num);
             else gameManager->setPlayerColor3(num);
             return num;
         case ICON_RANDOMIZER_API_GLOW:
-            if (useDual) setSDIValue(separateDualIcons, SDI_GLOW, glow);
+            if (useDual) setModValue(separateDualIcons, SDI_GLOW, glow);
             else gameManager->setPlayerGlow(glow);
             return glow;
         case ICON_RANDOMIZER_API_CUBE:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_CUBE, num);
+                if (useDual) setModValue(separateDualIcons, SDI_CUBE, num);
                 else gameManager->setPlayerFrame(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_CUBE "-dual" : MI_CUBE, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_CUBE "-dual" : MI_CUBE, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_CUBE "-dual" : MI_CUBE, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_CUBE "-dual" : MI_CUBE, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_SHIP:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_SHIP, num);
+                if (useDual) setModValue(separateDualIcons, SDI_SHIP, num);
                 else gameManager->setPlayerShip(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_SHIP "-dual" : MI_SHIP, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_SHIP "-dual" : MI_SHIP, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_SHIP "-dual" : MI_SHIP, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_SHIP "-dual" : MI_SHIP, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_BALL:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_BALL, num);
+                if (useDual) setModValue(separateDualIcons, SDI_BALL, num);
                 else gameManager->setPlayerBall(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_BALL "-dual" : MI_BALL, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_BALL "-dual" : MI_BALL, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_BALL "-dual" : MI_BALL, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_BALL "-dual" : MI_BALL, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_UFO:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_UFO, num);
+                if (useDual) setModValue(separateDualIcons, SDI_UFO, num);
                 else gameManager->setPlayerBird(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_UFO "-dual" : MI_UFO, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_UFO "-dual" : MI_UFO, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_UFO "-dual" : MI_UFO, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_UFO "-dual" : MI_UFO, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_WAVE:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_WAVE, num);
+                if (useDual) setModValue(separateDualIcons, SDI_WAVE, num);
                 else gameManager->setPlayerDart(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_WAVE "-dual" : MI_WAVE, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_WAVE "-dual" : MI_WAVE, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_WAVE "-dual" : MI_WAVE, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_WAVE "-dual" : MI_WAVE, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_ROBOT:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_ROBOT, num);
+                if (useDual) setModValue(separateDualIcons, SDI_ROBOT, num);
                 else gameManager->setPlayerRobot(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_ROBOT "-dual" : MI_ROBOT, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_ROBOT "-dual" : MI_ROBOT, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_ROBOT "-dual" : MI_ROBOT, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_ROBOT "-dual" : MI_ROBOT, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_SPIDER:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_SPIDER, num);
+                if (useDual) setModValue(separateDualIcons, SDI_SPIDER, num);
                 else gameManager->setPlayerSpider(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_SPIDER "-dual" : MI_SPIDER, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_SPIDER "-dual" : MI_SPIDER, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_SPIDER "-dual" : MI_SPIDER, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_SPIDER "-dual" : MI_SPIDER, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_SWING:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_SWING, num);
+                if (useDual) setModValue(separateDualIcons, SDI_SWING, num);
                 else gameManager->setPlayerSwing(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_SWING "-dual" : MI_SWING, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_SWING "-dual" : MI_SWING, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_SWING "-dual" : MI_SWING, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_SWING "-dual" : MI_SWING, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_JETPACK:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_JETPACK, num);
+                if (useDual) setModValue(separateDualIcons, SDI_JETPACK, num);
                 else gameManager->setPlayerJetpack(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_JETPACK "-dual" : MI_JETPACK, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_JETPACK "-dual" : MI_JETPACK, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_JETPACK "-dual" : MI_JETPACK, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_JETPACK "-dual" : MI_JETPACK, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_DEATH_EFFECT:
-            if (useDual) setSDIValue(separateDualIcons, SDI_DEATH, num);
+            if (useDual) setModValue(separateDualIcons, SDI_DEATH, num);
             else gameManager->setPlayerDeathEffect(num);
             return num;
         case ICON_RANDOMIZER_API_TRAIL:
             if (idx < vec.size()) {
-                if (useDual) setSDIValue(separateDualIcons, SDI_TRAIL, num);
+                if (useDual) setModValue(separateDualIcons, SDI_TRAIL, num);
                 else gameManager->setPlayerStreak(num);
-                setSDIValue<std::string>(moreIcons, useDual ? MI_TRAIL "-dual" : MI_TRAIL, "");
+                setModValue<std::string>(moreIcons, useDual ? MI_TRAIL "-dual" : MI_TRAIL, "");
                 return num;
             }
-            setSDIValue(moreIcons, useDual ? MI_TRAIL "-dual" : MI_TRAIL, loadedIcons[num]);
+            setModValue(moreIcons, useDual ? MI_TRAIL "-dual" : MI_TRAIL, loadedIcons[num]);
             return 0;
         case ICON_RANDOMIZER_API_SHIP_FIRE:
-            if (useDual) setSDIValue(separateDualIcons, SDI_SHIP_FIRE, num);
+            if (useDual) setModValue(separateDualIcons, SDI_SHIP_FIRE, num);
             else gameManager->setPlayerShipStreak(num);
             return num;
         default:
             return -1;
     }
-}
-
-int IconRandomizer::randomize(int type, bool dual) {
-    // Convert the type to a randomize type and randomize it.
-    return randomize(fromConstant(type), dual);
 }
 
 void IconRandomizer::randomizeAll(RandomizeAllType type, bool dual) {
@@ -377,15 +362,10 @@ void IconRandomizer::randomizeAll(RandomizeAllType type, bool dual) {
     }
 }
 
-void IconRandomizer::randomizeAll(int type, bool dual) {
-    // Convert the type to a randomize all type and randomize all the icons of that type.
-    randomizeAll(fromAllConstant(type), dual);
-}
-
 int IconRandomizer::active(RandomizeType type, bool dual) {
     // Get the UnlockType from the randomize type, then get the game manager and the Separate Dual Icons mod.
     // If the mod is enabled and the dual parameter is true, use separate dual icons.
-    auto unlockType = unlockTypeFromRandomizeType(type);
+    auto unlockType = toUnlockType(type);
     auto gameManager = GameManager::sharedState();
     auto separateDualIcons = Loader::get()->getLoadedMod(SDI_ID);
     auto useDual = separateDualIcons && dual;
@@ -393,43 +373,38 @@ int IconRandomizer::active(RandomizeType type, bool dual) {
     // Get the value from the Separate Dual Icons mod if it is enabled and the dual parameter is true, otherwise get the value from the game manager.
     switch (type) {
         case ICON_RANDOMIZER_API_COLOR_1:
-            return useDual ? getSDIValue(separateDualIcons, SDI_COLOR_1, 0) : gameManager->getPlayerColor();
+            return useDual ? getModValue(separateDualIcons, SDI_COLOR_1, 0) : gameManager->getPlayerColor();
         case ICON_RANDOMIZER_API_COLOR_2:
-            return useDual ? getSDIValue(separateDualIcons, SDI_COLOR_2, 0) : gameManager->getPlayerColor2();
+            return useDual ? getModValue(separateDualIcons, SDI_COLOR_2, 0) : gameManager->getPlayerColor2();
         case ICON_RANDOMIZER_API_GLOW_COLOR:
-            return useDual ? getSDIValue(separateDualIcons, SDI_GLOW_COLOR, 0) : gameManager->getPlayerGlowColor();
+            return useDual ? getModValue(separateDualIcons, SDI_GLOW_COLOR, 0) : gameManager->getPlayerGlowColor();
         case ICON_RANDOMIZER_API_GLOW:
-            return useDual ? getSDIValue(separateDualIcons, SDI_GLOW, false) : gameManager->getPlayerGlow();
+            return useDual ? getModValue(separateDualIcons, SDI_GLOW, false) : gameManager->getPlayerGlow();
         case ICON_RANDOMIZER_API_CUBE:
-            return useDual ? getSDIValue(separateDualIcons, SDI_CUBE, 1) : gameManager->getPlayerFrame();
+            return useDual ? getModValue(separateDualIcons, SDI_CUBE, 1) : gameManager->getPlayerFrame();
         case ICON_RANDOMIZER_API_SHIP:
-            return useDual ? getSDIValue(separateDualIcons, SDI_SHIP, 1) : gameManager->getPlayerShip();
+            return useDual ? getModValue(separateDualIcons, SDI_SHIP, 1) : gameManager->getPlayerShip();
         case ICON_RANDOMIZER_API_BALL:
-            return useDual ? getSDIValue(separateDualIcons, SDI_BALL, 1) : gameManager->getPlayerBall();
+            return useDual ? getModValue(separateDualIcons, SDI_BALL, 1) : gameManager->getPlayerBall();
         case ICON_RANDOMIZER_API_UFO:
-            return useDual ? getSDIValue(separateDualIcons, SDI_UFO, 1) : gameManager->getPlayerBird();
+            return useDual ? getModValue(separateDualIcons, SDI_UFO, 1) : gameManager->getPlayerBird();
         case ICON_RANDOMIZER_API_WAVE:
-            return useDual ? getSDIValue(separateDualIcons, SDI_WAVE, 1) : gameManager->getPlayerDart();
+            return useDual ? getModValue(separateDualIcons, SDI_WAVE, 1) : gameManager->getPlayerDart();
         case ICON_RANDOMIZER_API_ROBOT:
-            return useDual ? getSDIValue(separateDualIcons, SDI_ROBOT, 1) : gameManager->getPlayerRobot();
+            return useDual ? getModValue(separateDualIcons, SDI_ROBOT, 1) : gameManager->getPlayerRobot();
         case ICON_RANDOMIZER_API_SPIDER:
-            return useDual ? getSDIValue(separateDualIcons, SDI_SPIDER, 1) : gameManager->getPlayerSpider();
+            return useDual ? getModValue(separateDualIcons, SDI_SPIDER, 1) : gameManager->getPlayerSpider();
         case ICON_RANDOMIZER_API_SWING:
-            return useDual ? getSDIValue(separateDualIcons, SDI_SWING, 1) : gameManager->getPlayerSwing();
+            return useDual ? getModValue(separateDualIcons, SDI_SWING, 1) : gameManager->getPlayerSwing();
         case ICON_RANDOMIZER_API_JETPACK:
-            return useDual ? getSDIValue(separateDualIcons, SDI_JETPACK, 1) : gameManager->getPlayerJetpack();
+            return useDual ? getModValue(separateDualIcons, SDI_JETPACK, 1) : gameManager->getPlayerJetpack();
         case ICON_RANDOMIZER_API_DEATH_EFFECT:
-            return useDual ? getSDIValue(separateDualIcons, SDI_DEATH, 1) : gameManager->getPlayerDeathEffect();
+            return useDual ? getModValue(separateDualIcons, SDI_DEATH, 1) : gameManager->getPlayerDeathEffect();
         case ICON_RANDOMIZER_API_TRAIL:
-            return useDual ? getSDIValue(separateDualIcons, SDI_TRAIL, 1) : gameManager->getPlayerStreak();
+            return useDual ? getModValue(separateDualIcons, SDI_TRAIL, 1) : gameManager->getPlayerStreak();
         case ICON_RANDOMIZER_API_SHIP_FIRE:
-            return useDual ? getSDIValue(separateDualIcons, SDI_SHIP_FIRE, 1) : gameManager->getPlayerShipFire();
+            return useDual ? getModValue(separateDualIcons, SDI_SHIP_FIRE, 1) : gameManager->getPlayerShipFire();
         default:
             return -1;
     }
-}
-
-int IconRandomizer::active(int type, bool dual) {
-    // Convert the type to a randomize type and get the active value.
-    return active(fromConstant(type), dual);
 }

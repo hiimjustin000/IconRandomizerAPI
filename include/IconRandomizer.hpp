@@ -77,18 +77,18 @@ private:
     // This takes a parameter for the type of color to initialize.
     static void setupUnlockedColors(UnlockType type);
 
-    // A helper function to get a saved value from the Separate Dual Icons mod by Weebify.
+    // A helper function to get a saved value from a Geode mod.
     // This takes the mod, a string for the name of the setting, and a parameter for the default value of the setting.
     template <class T>
-    static T getSDIValue(geode::Mod* mod, std::string const& key, T const& defaultValue) {
+    static T getModValue(geode::Mod* mod, std::string const& key, T const& defaultValue) {
         // Get the mod's saved value if it exists, otherwise return the default value.
         return mod ? mod->getSavedValue(key, defaultValue) : defaultValue;
     }
 
-    // A helper function to set a saved value from the Separate Dual Icons mod by Weebify.
+    // A helper function to set a saved value from a Geode mod.
     // This takes the mod, a string for the name of the setting, and a parameter for the value of the setting.
     template <class T>
-    static void setSDIValue(geode::Mod* mod, std::string const& key, T const& value) {
+    static void setModValue(geode::Mod* mod, std::string const& key, T const& value) {
         // Set the mod's saved value, if the mod is actually loaded.
         if (mod) mod->setSavedValue(key, value);
     }
@@ -119,32 +119,14 @@ public:
      * @param type The icon type to convert.
      * @returns The randomize type for the icon type.
      */
-    static RandomizeType randomizeTypeFromIconType(IconType type);
+    static RandomizeType fromIconType(IconType type);
 
     /**
-     * A function to convert an icon type to an ICON_RANDOMIZER_API constant.
-     * This function is deprecated and is only used for backwards compatibility.
-     * @param type The type of icon to convert.
-     * @returns The ICON_RANDOMIZER_API constant for the icon type.
-     */
-    [[deprecated("Use randomizeTypeFromIconType instead.")]]
-    static int fromIconType(IconType type);
-
-    /**
-     * A function to convert a randomize type to an icon type.
+     * A function to convert a randomize type to an unlock type.
      * @param type The randomize type to convert.
      * @returns The unlock type for the randomize type.
      */
-    static UnlockType unlockTypeFromRandomizeType(RandomizeType type);
-
-    /**
-     * A function to convert an ICON_RANDOMIZER_API constant to an unlock type.
-     * This function is deprecated and is only used for backwards compatibility.
-     * @param type The ICON_RANDOMIZER_API constant to convert.
-     * @returns The unlock type for the ICON_RANDOMIZER_API constant.
-     */
-    [[deprecated("Use unlockTypeFromRandomizeType instead.")]]
-    static UnlockType toUnlockType(int type);
+    static UnlockType toUnlockType(RandomizeType type);
 
     /**
      * The function to randomize an icon or color.
@@ -155,30 +137,11 @@ public:
     static int randomize(RandomizeType type, bool dual = false);
 
     /**
-     * The function to randomize an icon or color.
-     * This function is deprecated and is only used for backwards compatibility.
-     * @param type The type of icon or color to randomize. (Use the ICON_RANDOMIZER_API constants for this.)
-     * @param dual Whether or not to randomize the separate dual icon or color. (Requires the mod "Separate Dual Icons" by Weebify)
-     * @returns The ID of the randomized icon.
-     */
-    [[deprecated("Use randomize with the RandomizeType enum instead.")]]
-    static int randomize(int type, bool dual = false);
-
-    /**
      * The function to randomize multiple types of icons or colors at once.
      * @param type The types of icons to randomize.
      * @param dual Whether or not to randomize the separate dual icon or color. (Requires the mod "Separate Dual Icons" by Weebify)
      */
     static void randomizeAll(RandomizeAllType type, bool dual = false);
-
-    /**
-     * The function to randomize multiple types of icons or colors at once.
-     * This function is deprecated and is only used for backwards compatibility.
-     * @param type The types of icons to randomize. (Use the ICON_RANDOMIZER_API_ALL constants for this.)
-     * @param dual Whether or not to randomize the separate dual icon or color. (Requires the mod "Separate Dual Icons" by Weebify)
-     */
-    [[deprecated("Use randomizeAll with the RandomizeAllType enum instead.")]]
-    static void randomizeAll(int type, bool dual = false);
 
     /**
      * Gets the current icon or color ID for a specific type.
@@ -187,14 +150,4 @@ public:
      * @returns The ID of the current icon.
      */
     static int active(RandomizeType type, bool dual = false);
-
-    /**
-     * Gets the current icon or color ID for a specific type.
-     * This function is deprecated and is only used for backwards compatibility.
-     * @param type The type of icon or color to get the ID for. (Use the ICON_RANDOMIZER_API constants for this.)
-     * @param dual Whether or not to get the ID for the separate dual icon or color. (Requires the mod "Separate Dual Icons" by Weebify)
-     * @returns The ID of the current icon.
-     */
-    [[deprecated("Use active with the RandomizeType enum instead.")]]
-    static int active(int type, bool dual = false);
 };
