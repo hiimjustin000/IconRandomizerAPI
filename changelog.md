@@ -1,4 +1,8 @@
 # Icon Randomizer API Changelog
+## v2.0.0 (2024-11-15)
+- Fixed the semver (I realized that I made a breaking change in a patch version)
+- Ported to Geode v4.0.0-beta.1
+
 ## v1.1.3-beta.1 (2024-11-13)
 - Removed deprecated API methods due to the game update
 - Renamed a few API methods to replace the deprecated ones

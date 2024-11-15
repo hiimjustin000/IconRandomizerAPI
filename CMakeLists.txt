@@ -5,7 +5,7 @@ set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(ICON_RANDOMIZER_TESTING OFF)
 
-project(IconRandomizerAPI VERSION 1.1.3)
+project(IconRandomizerAPI VERSION 2.0.0)
 
 add_library(${PROJECT_NAME} SHARED
     src/IconRandomizer.cpp
